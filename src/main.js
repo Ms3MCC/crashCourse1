@@ -24,15 +24,33 @@ cubeTextureLoader.setPath('static/textures/cubeMap/')
 const sunTexture  = textureLoader.load('static/textures/2k_sun.jpg')
 const mercuryTexture = textureLoader.load("static/textures/2k_mercury.jpg");
 mercuryTexture.colorSpace = THREE.SRGBColorSpace
+
 const venusTexture = textureLoader.load("static/textures/2k_venus_surface.jpg");
 venusTexture.colorSpace = THREE.SRGBColorSpace
+
 const earthTexture = textureLoader.load("static/textures/2k_earth_daymap.jpg");
 earthTexture.colorSpace = THREE.SRGBColorSpace
+
 const marsTexture = textureLoader.load("static/textures/2k_mars.jpg");
 marsTexture.colorSpace = THREE.SRGBColorSpace
+
 const moonTexture = textureLoader.load("static/textures/2k_moon.jpg");
 moonTexture.colorSpace = THREE.SRGBColorSpace
 
+const jupiterTexture=textureLoader.load("static/textures/jupiter2_4k.jpg");
+jupiterTexture.colorSpace = THREE.SRGBColorSpace
+
+const saturnTexture=textureLoader.load("static/textures/2k_saturn.jpg");
+saturnTexture.colorSpace = THREE.SRGBColorSpace
+
+const saturnRingTexture=textureLoader.load("static/textures/2k_saturn_ring_alpha.png");
+saturnRingTexture.colorSpace = THREE.SRGBColorSpace
+
+const uranusTexture=textureLoader.load("static/textures/2k_uranus.jpg");
+uranusTexture.colorSpace = THREE.SRGBColorSpace
+
+const neptuneTexture=textureLoader.load("static/textures/2k_neptune.jpg");
+neptuneTexture.colorSpace = THREE.SRGBColorSpace
 // const backgroundTexture=textureLoader.load("static/textures/2k_stars_milky_way.jpg")
 
 
@@ -65,6 +83,22 @@ const moonMaterial = new THREE.MeshStandardMaterial({
   map: moonTexture,
 });
 
+const jupiterMaterial =  new THREE.MeshStandardMaterial({
+  map: jupiterTexture,
+});
+const saturnMaterial =  new THREE.MeshStandardMaterial({
+  map: saturnTexture,
+});
+const uranusMaterial =  new THREE.MeshStandardMaterial({
+  map: uranusTexture,
+});
+
+const neptuneMaterial =  new THREE.MeshStandardMaterial({
+  map: neptuneTexture,
+});
+
+
+
 
 
 // add stuff here
@@ -81,6 +115,8 @@ sun.scale.setScalar(5)
 
 sunMaterial.roughness=1
 
+
+
 const planets = [
   {
     name: "Mercury",
@@ -88,6 +124,7 @@ const planets = [
     distance: 10,
     speed: 0.01,
     material: mercuryMaterial,
+    ring:0,
     moons: [],
   },
   {
@@ -96,6 +133,7 @@ const planets = [
     distance: 15,
     speed: 0.007,
     material: venusMaterial,
+    ring:0,
     moons: [],
   },
   {
@@ -104,6 +142,7 @@ const planets = [
     distance: 20,
     speed: 0.005,
     material: earthMaterial,
+    ring:0,
     moons: [
       {
         name: "Moon",
@@ -119,6 +158,7 @@ const planets = [
     distance: 25,
     speed: 0.003,
     material: marsMaterial,
+    ring:0,
     moons: [
       {
         name: "Phobos",
@@ -135,7 +175,115 @@ const planets = [
       },
     ],
   },
+  {
+    name: "Jupiter",
+    radius: 2.8,
+    distance: 60,
+    speed: 0.001,
+    material: jupiterMaterial,
+    ring:0,
+    moons: [
+      {
+        name: "Io",
+        radius: 0.2,
+        distance: 2,
+        speed: 0.01,
+      },
+      {
+        name: "Europa",
+        radius: 0.2,
+        distance: 3,
+        speed: 0.008,
+      },
+      {
+        name: "Ganymede",
+        radius: 0.2,
+        distance: 4,
+        speed: 0.006,
+      },
+      {
+        name: "Callisto",
+        radius: 0.1,
+        distance: 5,
+        speed: 0.004,
+      },
+    ],
+  },
+  {
+    name: "Saturn",
+    radius: 2.5,
+    distance: 100,
+    speed: 0.0009,
+    material: saturnMaterial,
+    ring:1,
+    moons: [
+      {
+        name: "Titan",
+        radius: 0.3,
+        distance: 3,
+        speed: 0.005,
+      },
+      {
+        name: "Enceladus",
+        radius: 0.2,
+        distance: 5,
+        speed: 0.004,
+      },
+      {
+        name: "Mimas",
+        radius: 0.1,
+        distance: 2,
+        speed: 0.003,
+      },
+    ],
+  },
+  {
+    name: "Uranus",
+    radius: 2.8,
+    distance: 140,
+    speed: 0.0006,
+    material: uranusMaterial,
+    ring:0,
+    moons: [
+      {
+        name: "Miranda",
+        radius: 0.3,
+        distance: 3,
+        speed: 0.01,
+      },
+      {
+        name: "Ariel",
+        radius: 0.3,
+        distance: 2,
+        speed: 0.009,
+      },
+      {
+        name: "Umbriel",
+        radius: 0.3,
+        distance: 4,
+        speed: 0.008,
+      },
+    ],
+  },
+  {
+    name: "Neptune",
+    radius: 2.9,
+    distance: 160,
+    speed: 0.0005,
+    material: neptuneMaterial,
+    ring:0,
+    moons: [
+      {
+        name: "Triton",
+        radius: 0.3,
+        distance: 2,
+        speed: 0.007,
+      },
+    ],
+  },
 ];
+
+
 
 
 const createPlanet=(planet)=>{
@@ -145,6 +293,10 @@ const createPlanet=(planet)=>{
   )
   planetMesh.scale.setScalar(planet.radius)
   planetMesh.position.x =planet.distance
+  // planetMesh.position.y=planet.distance
+  planetMesh.position.z=planet.distance
+
+  
   return planetMesh
 
 }
@@ -159,6 +311,7 @@ const createMoon=(moon)=>{
 
 
 const  planetMeshes =planets.map((planet)=>{
+  console.log(planet)
   
   const planetMesh= createPlanet(planet)
   scene.add(planetMesh)
@@ -167,8 +320,61 @@ const  planetMeshes =planets.map((planet)=>{
     const moonMesh=createMoon(moon)
     planetMesh.add(moonMesh)
   })
+
+ 
   return planetMesh
 })
+
+
+
+
+
+const asteroidBeltRadius = (planets[3].distance + planets[4].distance) / 2; // Between Mars and Jupiter
+
+const createAsteroid = () => {
+  const asteroidGeometry = new THREE.SphereGeometry(Math.random() * 0.2 + 0.1, 8, 8); // Random small size
+  const asteroidMaterial = new THREE.MeshStandardMaterial({
+    color: new THREE.Color(Math.random(), Math.random(), Math.random()), // Random color
+  });
+  const asteroid = new THREE.Mesh(asteroidGeometry, asteroidMaterial);
+
+  // Random position around the asteroid belt
+  const angle = Math.random() * Math.PI * 2; // Random angle for the asteroid's position
+  const distance = asteroidBeltRadius + Math.random() * 5 - 2.5; // Random distance within the belt's radius range
+
+  asteroid.position.x = Math.sin(angle) * distance;
+  asteroid.position.z = Math.cos(angle) * distance;
+
+  // Random rotation for variety
+  asteroid.rotation.x = Math.random() * Math.PI;
+  asteroid.rotation.y = Math.random() * Math.PI;
+  asteroid.rotation.z = Math.random() * Math.PI;
+
+  return asteroid;
+};
+
+// Create asteroid belt
+const asteroidBelt = new THREE.Group(); // To hold all the asteroids as a single group
+const asteroidCount = 200; // Adjust for the number of asteroids
+
+for (let i = 0; i < asteroidCount; i++) {
+  const asteroid = createAsteroid();
+  asteroidBelt.add(asteroid);
+}
+
+scene.add(asteroidBelt);
+
+
+
+const animateAsteroidBelt = () => {
+  asteroidBelt.rotation.y += 0.0005; // Rotate the belt to simulate orbital motion
+};
+
+
+
+
+
+
 
 //adding light
 
@@ -189,12 +395,12 @@ const camera = new THREE.PerspectiveCamera(
   35,
   window.innerWidth / window.innerHeight,
   0.1,
-  400
+  400000
 );
 
 
 
-camera.position.z = 100;
+camera.position.z = 10000000;
 camera.position.y = 5;
 
 
@@ -233,6 +439,7 @@ const renderloop = () => {
     planet.rotation.y+=1*planets[index].speed
     planet.position.x=Math.sin( planet.rotation.y)*planets[index].distance
     planet.position.z=Math.cos( planet.rotation.y)*planets[index].distance
+   
 
     planet.children.forEach((moon,moonIndex)=>{
       moon.rotation.y += planets[index].moons[moonIndex].speed
@@ -241,9 +448,12 @@ const renderloop = () => {
 
     })
 
+
+
+ 
   })
   
-
+  animateAsteroidBelt();
   controls.update();
   renderer.render(scene, camera);
   window.requestAnimationFrame(renderloop);
